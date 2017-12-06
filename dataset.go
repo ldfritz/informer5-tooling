@@ -425,6 +425,189 @@ type DatasetInfoResponse struct {
 	} `json:"_embedded"`
 }
 
+type DatasetListParams struct {
+	Start int `url:"start,omitempty"`
+	Limit int `url:"limit,omitempty"`
+}
+
+type DatasetListResponse struct {
+	Links struct {
+		Self struct {
+			Href string `json:"href"`
+		} `json:"self"`
+		Curies []struct {
+			Name      string `json:"name"`
+			Href      string `json:"href"`
+			Templated bool   `json:"templated"`
+		} `json:"curies"`
+	} `json:"_links"`
+	Start int `json:"start"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	Aggs  struct {
+		Type []struct {
+			ID    string `json:"id"`
+			Label string `json:"label"`
+			Value int    `json:"value"`
+		} `json:"type"`
+		Datasource []struct {
+			ID    int    `json:"id"`
+			Label string `json:"label"`
+			Value int    `json:"value"`
+		} `json:"datasource"`
+		Total int `json:"total"`
+	} `json:"aggs"`
+	Permissions struct {
+		Export bool `json:"export"`
+		Create bool `json:"create"`
+	} `json:"permissions"`
+	Embedded struct {
+		InfDataset []struct {
+			Links struct {
+				Self struct {
+					Href string `json:"href"`
+				} `json:"self"`
+				InfDraft struct {
+					Href string `json:"href"`
+				} `json:"inf:draft"`
+				InfRun struct {
+					Href string `json:"href"`
+				} `json:"inf:run"`
+				InfRefresh struct {
+					Href string `json:"href"`
+				} `json:"inf:refresh"`
+				InfData struct {
+					Href      string `json:"href"`
+					Templated bool   `json:"templated"`
+				} `json:"inf:data"`
+				InfUserSettings struct {
+					Href string `json:"href"`
+				} `json:"inf:user-settings"`
+				InfQuery struct {
+					Href string `json:"href"`
+				} `json:"inf:query"`
+				InfOwner struct {
+					Href string `json:"href"`
+				} `json:"inf:owner"`
+				InfSearch struct {
+					Href string `json:"href"`
+				} `json:"inf:search"`
+				InfMapping struct {
+					Href string `json:"href"`
+				} `json:"inf:mapping"`
+				InfJobTemplates struct {
+					Href string `json:"href"`
+				} `json:"inf:job-templates"`
+				InfFields struct {
+					Href string `json:"href"`
+				} `json:"inf:fields"`
+				InfCount struct {
+					Href string `json:"href"`
+				} `json:"inf:count"`
+				InfComments struct {
+					Href string `json:"href"`
+				} `json:"inf:comments"`
+				InfVisuals struct {
+					Href string `json:"href"`
+				} `json:"inf:visuals"`
+				InfVisualTemplates struct {
+					Href string `json:"href"`
+				} `json:"inf:visual-templates"`
+				InfDatasetTags struct {
+					Href string `json:"href"`
+				} `json:"inf:dataset-tags"`
+				InfDatasetTag struct {
+					Href      string `json:"href"`
+					Templated bool   `json:"templated"`
+				} `json:"inf:dataset-tag"`
+				InfDiscover struct {
+					Href string `json:"href"`
+				} `json:"inf:discover"`
+				InfFilters struct {
+					Href string `json:"href"`
+				} `json:"inf:filters"`
+				InfDatasetShares struct {
+					Href string `json:"href"`
+				} `json:"inf:dataset-shares"`
+				InfFlow struct {
+					Href string `json:"href"`
+				} `json:"inf:flow"`
+				InfGroup struct {
+					Href string `json:"href"`
+				} `json:"inf:group"`
+				InfGroupRows struct {
+					Href string `json:"href"`
+				} `json:"inf:group-rows"`
+				InfDatasetShare struct {
+					Href      string `json:"href"`
+					Templated bool   `json:"templated"`
+				} `json:"inf:dataset-share"`
+				InfImport struct {
+					Href string `json:"href"`
+				} `json:"inf:import"`
+				InfExceptions struct {
+					Href string `json:"href"`
+				} `json:"inf:exceptions"`
+				Edit struct {
+					Href string `json:"href"`
+				} `json:"edit"`
+			} `json:"_links"`
+			NaturalID   string `json:"naturalId"`
+			Permissions struct {
+				Edit           bool `json:"edit"`
+				Share          bool `json:"share"`
+				Delete         bool `json:"delete"`
+				Write          bool `json:"write"`
+				AddVisual      bool `json:"addVisual"`
+				DeleteVisual   bool `json:"deleteVisual"`
+				ChangeOwner    bool `json:"changeOwner"`
+				Copy           bool `json:"copy"`
+				Rename         bool `json:"rename"`
+				Refresh        bool `json:"refresh"`
+				ModifyVisuals  bool `json:"modifyVisuals"`
+				ModifyFlows    bool `json:"modifyFlows"`
+				ReplaceFile    bool `json:"replaceFile"`
+				ModifySettings bool `json:"modifySettings"`
+				CreateDataView bool `json:"createDataView"`
+				AssignTags     bool `json:"assignTags"`
+			} `json:"permissions"`
+			ID          int         `json:"id"`
+			OwnerID     string      `json:"ownerId"`
+			Slug        string      `json:"slug"`
+			Name        string      `json:"name"`
+			Description interface{} `json:"description"`
+			Embedded    bool        `json:"embedded"`
+			EsIndex     string      `json:"esIndex"`
+			EsType      string      `json:"esType"`
+			Records     int         `json:"records"`
+			Size        string      `json:"size"`
+			Source      interface{} `json:"source"`
+			SourceID    interface{} `json:"sourceId"`
+			Params      struct {
+			} `json:"params"`
+			DataUpdatedAt      time.Time   `json:"dataUpdatedAt"`
+			DataExpiresAt      interface{} `json:"dataExpiresAt"`
+			TTL                interface{} `json:"ttl"`
+			Append             bool        `json:"append"`
+			Shared             bool        `json:"shared"`
+			TimestampField     interface{} `json:"timestampField"`
+			LastDurationMillis string      `json:"lastDurationMillis"`
+			WindowSize         int         `json:"windowSize"`
+			Settings           struct {
+			} `json:"settings"`
+			Flow         []interface{} `json:"flow"`
+			CreatedAt    time.Time     `json:"createdAt"`
+			UpdatedAt    time.Time     `json:"updatedAt"`
+			DatasourceID interface{}   `json:"datasourceId"`
+			ReportID     interface{}   `json:"reportId"`
+			QueryID      int           `json:"queryId"`
+			EditingID    interface{}   `json:"editingId"`
+			FolderID     interface{}   `json:"folderId"`
+			Datasource   interface{}   `json:"datasource"`
+		} `json:"inf:dataset"`
+	} `json:"_embedded"`
+}
+
 //func Append(data string) error {
 //	MethodAppend = http.MethodPost
 //	URLAppend    = "{.API}/api/datasets/{.ID}/data"
@@ -487,6 +670,23 @@ func DatasetInfo(api *sling.Sling, id string) (DatasetInfoResponse, *http.Respon
 	resp, err := api.New().Get("datasets/" + id).ReceiveSuccess(&obj)
 	if err != nil {
 		return obj, resp, err
+	}
+	return obj, resp, nil
+}
+
+func DatasetList(api *sling.Sling) (DatasetListResponse, *http.Response, error) {
+	s := api.New().Get("datasets")
+	var obj DatasetListResponse
+	resp, err := s.ReceiveSuccess(&obj)
+	if err != nil {
+		return obj, resp, err
+	}
+	if obj.Total > 20 {
+		params := DatasetListParams{Start: 0, Limit: obj.Total}
+		resp, err := s.QueryStruct(&params).ReceiveSuccess(&obj)
+		if err != nil {
+			return obj, resp, err
+		}
 	}
 	return obj, resp, nil
 }

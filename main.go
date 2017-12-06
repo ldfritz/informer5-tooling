@@ -61,6 +61,8 @@ func main() {
 			CommandDatasetDownload(os.Args, api)
 		case "info":
 			CommandDatasetInfo(os.Args, api)
+		case "list":
+			CommandDatasetList(api)
 		case "upload":
 			CommandDatasetUpload(os.Args, api)
 		default:
@@ -147,7 +149,20 @@ func CommandDatasetInfo(args []string, api *sling.Sling) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println(obj.ID, obj.Name, obj.Description)
+	fmt.Printf("%-4d %s\n", obj.ID, obj.Name)
+	if obj.Description != "" {
+		fmt.Println(obj.Description)
+	}
+}
+
+func CommandDatasetList(api *sling.Sling) {
+	obj, _, err := DatasetList(api)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for _, v := range obj.Embedded.InfDataset {
+		fmt.Printf("%-4d %s\n", v.ID, v.Name)
+	}
 }
 
 func CommandDatasetUpload(args []string, api *sling.Sling) {
