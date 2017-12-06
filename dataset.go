@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 	"time"
 
@@ -655,7 +656,7 @@ func DatasetDownload(api *sling.Sling, id string) (DatasetDownloadResponse, *htt
 	if err != nil {
 		return obj, resp, err
 	}
-	if obj.Total > 50 {
+	if obj.Count < obj.Total {
 		params := DatasetDownloadParams{Start: 0, Limit: obj.Total}
 		resp, err := s.QueryStruct(&params).ReceiveSuccess(&obj)
 		if err != nil {
@@ -681,7 +682,7 @@ func DatasetList(api *sling.Sling) (DatasetListResponse, *http.Response, error) 
 	if err != nil {
 		return obj, resp, err
 	}
-	if obj.Total > 20 {
+	if obj.Count < obj.Total {
 		params := DatasetListParams{Start: 0, Limit: obj.Total}
 		resp, err := s.QueryStruct(&params).ReceiveSuccess(&obj)
 		if err != nil {
@@ -689,6 +690,20 @@ func DatasetList(api *sling.Sling) (DatasetListResponse, *http.Response, error) 
 		}
 	}
 	return obj, resp, nil
+}
+
+func DatasetUpload(api *sling.Sling, id string, contents []byte) (*http.Response, error) {
+	s := api.New().Put("datasets/" + id + "/data")
+	req, err := s.Body(bytes.NewReader(contents)).Request()
+	if err != nil {
+		return &http.Response{}, err
+	}
+	client := InsecureClient()
+	resp, err := client.Do(req)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
 }
 
 //// UploadData overwrites the Dataset's data with that given.

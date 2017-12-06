@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -171,4 +172,15 @@ func CommandDatasetUpload(args []string, api *sling.Sling) {
 		MainHelp()
 		return
 	}
+	id := args[3]
+	filename := args[4]
+	contents, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	_, err = DatasetUpload(api, id, contents)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(len(contents))
 }
