@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -123,12 +124,16 @@ func CommandDatasetDownload(args []string, api *sling.Sling) {
 		MainHelp()
 		return
 	}
-	//		id := args[3]
-	//		_, err := DatasetDownload(api, id)
-	//		if err != nil {
-	//			log.Fatalln(err)
-	//		}
-	//		fmt.Println(id)
+	id := args[3]
+	obj, _, err := DatasetDownload(api, id)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	b, err := json.MarshalIndent(obj.Items, "", "  ")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(string(b))
 }
 
 func CommandDatasetInfo(args []string, api *sling.Sling) {

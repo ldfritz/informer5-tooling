@@ -1,5 +1,6 @@
 i5*
 config.json
+tmp/
 
 # Binaries for programs and plugins
 *.exe

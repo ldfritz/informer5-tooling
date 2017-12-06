@@ -179,8 +179,14 @@ type DatasetCreateResponse struct {
 	} `json:"_embedded"`
 }
 
-// DatasetData was automatically generated from the JSON from getting
-// Informer Dataset data (/dataset/{id}/data).
+type DatasetDownloadParams struct {
+	Q      string      `url:"q,omitempty"`
+	Sort   []string    `url:"sort,omitempty"`
+	Start  int         `url:"start,omitempty"`
+	Limit  int         `url:"limit,omitempty"`
+	Filter interface{} `url:"filter,omitempty"`
+}
+
 type DatasetDownloadResponse struct {
 	Links struct {
 		Self struct {
@@ -193,8 +199,6 @@ type DatasetDownloadResponse struct {
 	Total int                      `json:"total"`
 }
 
-// Dataset was automatically generated from the JSON from getting an
-// Informer Dataset (/dataset/{id}).
 type DatasetInfoResponse struct {
 	Links struct {
 		Self struct {
@@ -440,8 +444,8 @@ type DatasetInfoResponse struct {
 
 func DatasetCreate(api *sling.Sling, name, description string) (DatasetCreateResponse, *http.Response, error) {
 	var obj DatasetCreateResponse
-	body := &DatasetCreateBody{name, description}
-	resp, err := api.New().Post("datasets").BodyForm(body).ReceiveSuccess(&obj)
+	body := DatasetCreateBody{name, description}
+	resp, err := api.New().Post("datasets").BodyForm(&body).ReceiveSuccess(&obj)
 	if err != nil {
 		return obj, resp, err
 	}
@@ -461,21 +465,22 @@ func DatasetDelete(api *sling.Sling, id string) (*http.Response, error) {
 	return resp, nil
 }
 
-//func Download() (DatasetData, error) {
-//	var record DatasetData
-//	url := "/api/datasets/" + strconv.Itoa(d.ID) + "/data"
-//	if err := d.Client.GetAs(url, &record); err != nil {
-//		return record, err
-//	}
-//	if record.Total > 50 {
-//		url += "?start=0&limit=" + strconv.Itoa(record.Total)
-//		if err := d.Client.GetAs(url, &record); err != nil {
-//			return record, err
-//		}
-//	}
-//	record.Client = d.Client
-//	return record, nil
-//}
+func DatasetDownload(api *sling.Sling, id string) (DatasetDownloadResponse, *http.Response, error) {
+	s := api.New().Get("datasets/" + id + "/data")
+	var obj DatasetDownloadResponse
+	resp, err := s.ReceiveSuccess(&obj)
+	if err != nil {
+		return obj, resp, err
+	}
+	if obj.Total > 50 {
+		params := DatasetDownloadParams{Start: 0, Limit: obj.Total}
+		resp, err := s.QueryStruct(&params).ReceiveSuccess(&obj)
+		if err != nil {
+			return obj, resp, err
+		}
+	}
+	return obj, resp, nil
+}
 
 func DatasetInfo(api *sling.Sling, id string) (DatasetInfoResponse, *http.Response, error) {
 	var obj DatasetInfoResponse
