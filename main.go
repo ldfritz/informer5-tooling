@@ -23,7 +23,8 @@ dataset Commands:
   create   NAME [DESCRIPTION]    Create a new dataset.
   delete   ID                    Delete a dataset.
   download ID                    Download dataset.
-  info     ID                    Display information about dataset.
+  info     ID                    Display dataset information.
+  list                           List datasets.
   upload   ID FILENAME           Upload data from FILE to dataset.`)
 }
 
@@ -87,6 +88,17 @@ func CommandDatasetAppend(args []string, api *sling.Sling) {
 		MainHelp()
 		return
 	}
+	id := args[3]
+	filename := args[4]
+	contents, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	_, err = DatasetAppend(api, id, contents)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(len(contents))
 }
 
 func CommandDatasetCreate(args []string, api *sling.Sling) {

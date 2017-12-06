@@ -609,22 +609,19 @@ type DatasetListResponse struct {
 	} `json:"_embedded"`
 }
 
-//func Append(data string) error {
-//	MethodAppend = http.MethodPost
-//	URLAppend    = "{.API}/api/datasets/{.ID}/data"
-//	resp, err := d.Client.Post("/api/datasets/"+strconv.Itoa(d.ID)+"/data", data)
-//	if err != nil {
-//		return err
-//	}
-//	if resp.StatusCode != http.StatusOK {
-//		body, err := ioutil.ReadAll(resp.Body)
-//		if err != nil {
-//			return err
-//		}
-//		return fmt.Errorf("%v %s", resp.Status, body)
-//	}
-//	return nil
-//}
+func DatasetAppend(api *sling.Sling, id string, contents []byte) (*http.Response, error) {
+	s := api.New().Post("datasets/" + id + "/data")
+	req, err := s.Body(bytes.NewReader(contents)).Request()
+	if err != nil {
+		return &http.Response{}, err
+	}
+	client := InsecureClient()
+	resp, err := client.Do(req)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
 
 func DatasetCreate(api *sling.Sling, name, description string) (DatasetCreateResponse, *http.Response, error) {
 	var obj DatasetCreateResponse
@@ -705,21 +702,3 @@ func DatasetUpload(api *sling.Sling, id string, contents []byte) (*http.Response
 	}
 	return resp, nil
 }
-
-//// UploadData overwrites the Dataset's data with that given.
-//func Upload(data string) error {
-//	MethodUpload = http.MethodPut
-//	URLUpload    = "{.API}/api/datasets/{.ID}/data"
-//	resp, err := d.Client.Put("/api/datasets/"+strconv.Itoa(d.ID)+"/data", data)
-//	if err != nil {
-//		return err
-//	}
-//	if resp.StatusCode != http.StatusOK {
-//		body, err := ioutil.ReadAll(resp.Body)
-//		if err != nil {
-//			return err
-//		}
-//		return fmt.Errorf("%v %s", resp.Status, body)
-//	}
-//	return nil
-//}
