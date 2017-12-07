@@ -54,19 +54,19 @@ func main() {
 	case "dataset":
 		switch action {
 		case "append":
-			CommandDatasetAppend(os.Args, api)
+			CommandDatasetAppend(api, os.Args)
 		case "create":
-			CommandDatasetCreate(os.Args, api)
+			CommandDatasetCreate(api, os.Args)
 		case "delete":
-			CommandDatasetDelete(os.Args, api)
+			CommandDatasetDelete(api, os.Args)
 		case "download":
-			CommandDatasetDownload(os.Args, api)
+			CommandDatasetDownload(api, os.Args)
 		case "info":
-			CommandDatasetInfo(os.Args, api)
+			CommandDatasetInfo(api, os.Args)
 		case "list":
 			CommandDatasetList(api)
 		case "upload":
-			CommandDatasetUpload(os.Args, api)
+			CommandDatasetUpload(api, os.Args)
 		default:
 			MainHelp()
 		}
@@ -82,7 +82,7 @@ func InsecureClient() *http.Client {
 	return &http.Client{Transport: t}
 }
 
-func CommandDatasetAppend(args []string, api *sling.Sling) {
+func CommandDatasetAppend(api *sling.Sling, args []string) {
 	if len(args) < 5 {
 		fmt.Println("missing argument(s): ID FILENAME\n")
 		MainHelp()
@@ -101,7 +101,7 @@ func CommandDatasetAppend(args []string, api *sling.Sling) {
 	fmt.Println(len(contents))
 }
 
-func CommandDatasetCreate(args []string, api *sling.Sling) {
+func CommandDatasetCreate(api *sling.Sling, args []string) {
 	if len(args) < 4 {
 		fmt.Println("missing argument(s): NAME [DESCRIPTION]\n")
 		MainHelp()
@@ -119,7 +119,7 @@ func CommandDatasetCreate(args []string, api *sling.Sling) {
 	fmt.Println(obj.ID)
 }
 
-func CommandDatasetDelete(args []string, api *sling.Sling) {
+func CommandDatasetDelete(api *sling.Sling, args []string) {
 	if len(args) < 4 {
 		fmt.Println("missing argument: ID\n")
 		MainHelp()
@@ -133,7 +133,7 @@ func CommandDatasetDelete(args []string, api *sling.Sling) {
 	fmt.Println(id)
 }
 
-func CommandDatasetDownload(args []string, api *sling.Sling) {
+func CommandDatasetDownload(api *sling.Sling, args []string) {
 	if len(args) < 4 {
 		fmt.Println("missing argument: ID\n")
 		MainHelp()
@@ -151,7 +151,7 @@ func CommandDatasetDownload(args []string, api *sling.Sling) {
 	fmt.Println(string(b))
 }
 
-func CommandDatasetInfo(args []string, api *sling.Sling) {
+func CommandDatasetInfo(api *sling.Sling, args []string) {
 	if len(args) < 4 {
 		fmt.Println("missing argument: ID\n")
 		MainHelp()
@@ -178,7 +178,7 @@ func CommandDatasetList(api *sling.Sling) {
 	}
 }
 
-func CommandDatasetUpload(args []string, api *sling.Sling) {
+func CommandDatasetUpload(api *sling.Sling, args []string) {
 	if len(args) < 5 {
 		fmt.Println("missing argument(s): ID FILENAME\n")
 		MainHelp()

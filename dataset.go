@@ -611,14 +611,17 @@ type DatasetListResponse struct {
 
 func DatasetAppend(api *sling.Sling, id string, contents []byte) (*http.Response, error) {
 	s := api.New().Post("datasets/" + id + "/data")
-	req, err := s.Body(bytes.NewReader(contents)).Request()
-	if err != nil {
-		return &http.Response{}, err
-	}
-	client := InsecureClient()
-	resp, err := client.Do(req)
-	if err != nil {
-		return resp, err
+	resp := &http.Response{}
+	for _, chunk := range ChunkContent(contents, LimitChunkSize) {
+		req, err := s.Body(bytes.NewReader(chunk)).Request()
+		if err != nil {
+			return resp, err
+		}
+		client := InsecureClient()
+		resp, err = client.Do(req)
+		if err != nil {
+			return resp, err
+		}
 	}
 	return resp, nil
 }
@@ -635,6 +638,19 @@ func DatasetCreate(api *sling.Sling, name, description string) (DatasetCreateRes
 
 func DatasetDelete(api *sling.Sling, id string) (*http.Response, error) {
 	req, err := api.New().Delete("datasets/" + id).Request()
+	if err != nil {
+		return &http.Response{}, err
+	}
+	client := InsecureClient()
+	resp, err := client.Do(req)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
+
+func DatasetDeleteData(api *sling.Sling, id string) (*http.Response, error) {
+	req, err := api.New().Delete("datasets/" + id + "/id").Request()
 	if err != nil {
 		return &http.Response{}, err
 	}
@@ -690,13 +706,11 @@ func DatasetList(api *sling.Sling) (DatasetListResponse, *http.Response, error) 
 }
 
 func DatasetUpload(api *sling.Sling, id string, contents []byte) (*http.Response, error) {
-	s := api.New().Put("datasets/" + id + "/data")
-	req, err := s.Body(bytes.NewReader(contents)).Request()
+	resp, err := DatasetDeleteData(api, id)
 	if err != nil {
-		return &http.Response{}, err
+		return resp, err
 	}
-	client := InsecureClient()
-	resp, err := client.Do(req)
+	resp, err = DatasetAppend(api, id, contents)
 	if err != nil {
 		return resp, err
 	}
