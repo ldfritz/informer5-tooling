@@ -1,4 +1,4 @@
-package main
+package informer5
 
 import (
 	"encoding/json"

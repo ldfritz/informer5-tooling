@@ -1,15 +1,14 @@
 package main
 
 import (
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/dghubble/sling"
+	informer5 "github.com/ldfritz/informer5-tooling"
 )
 
 func MainHelp() {
@@ -33,13 +32,13 @@ type Token struct {
 }
 
 func main() {
-	config, err := LoadConfigFile("config.json")
+	config, err := informer5.LoadConfigFile("config.json")
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	t := &Token{config.Token}
-	client := InsecureClient()
+	client := informer5.InsecureClient()
 	api := sling.New().Base(config.API).Path("api/").QueryStruct(t).Client(client)
 
 	if len(os.Args) < 3 {
@@ -75,13 +74,6 @@ func main() {
 	}
 }
 
-func InsecureClient() *http.Client {
-	t := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
-	return &http.Client{Transport: t}
-}
-
 func CommandDatasetAppend(api *sling.Sling, args []string) {
 	if len(args) < 5 {
 		fmt.Println("missing argument(s): ID FILENAME\n")
@@ -94,7 +86,7 @@ func CommandDatasetAppend(api *sling.Sling, args []string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	_, err = DatasetAppend(api, id, contents)
+	_, err = informer5.DatasetAppend(api, id, contents)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -112,7 +104,7 @@ func CommandDatasetCreate(api *sling.Sling, args []string) {
 	if len(args) == 5 {
 		description = args[4]
 	}
-	obj, _, err := DatasetCreate(api, name, description)
+	obj, _, err := informer5.DatasetCreate(api, name, description)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -126,7 +118,7 @@ func CommandDatasetDelete(api *sling.Sling, args []string) {
 		return
 	}
 	id := args[3]
-	_, err := DatasetDelete(api, id)
+	_, err := informer5.DatasetDelete(api, id)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -140,7 +132,7 @@ func CommandDatasetDownload(api *sling.Sling, args []string) {
 		return
 	}
 	id := args[3]
-	obj, _, err := DatasetDownload(api, id)
+	obj, _, err := informer5.DatasetDownload(api, id)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -158,7 +150,7 @@ func CommandDatasetInfo(api *sling.Sling, args []string) {
 		return
 	}
 	id := args[3]
-	obj, _, err := DatasetInfo(api, id)
+	obj, _, err := informer5.DatasetInfo(api, id)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -169,7 +161,7 @@ func CommandDatasetInfo(api *sling.Sling, args []string) {
 }
 
 func CommandDatasetList(api *sling.Sling) {
-	obj, _, err := DatasetList(api)
+	obj, _, err := informer5.DatasetList(api)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -190,7 +182,7 @@ func CommandDatasetUpload(api *sling.Sling, args []string) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	_, err = DatasetUpload(api, id, contents)
+	_, err = informer5.DatasetUpload(api, id, contents)
 	if err != nil {
 		log.Fatalln(err)
 	}
