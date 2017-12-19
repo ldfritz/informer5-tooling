@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/dghubble/sling"
 	informer5 "github.com/ldfritz/informer5-tooling"
@@ -30,7 +31,8 @@ dataset Commands:
 datasource Commands:
   create   NAME [DESCRIPTION]    Create a new datasource.
   delete   ID                    Delete a datasource.
-  info     ID                    Display datasource information.`)
+  info     ID                    Display datasource information.
+  list                           List datasets.`)
 }
 
 type Token struct {
@@ -41,6 +43,13 @@ func main() {
 	config, err := informer5.LoadConfigFile("config.json")
 	if err != nil {
 		log.Fatalln(err)
+	}
+
+	for _, v := range os.Args {
+		if strings.TrimLeft(v, "-") == "help" {
+			MainHelp()
+			return
+		}
 	}
 
 	t := &Token{config.Token}
@@ -83,6 +92,8 @@ func main() {
 			CommandDatasourceDelete(api, os.Args)
 		case "info":
 			CommandDatasourceInfo(api, os.Args)
+		case "list":
+			CommandDatasourceList(api)
 		default:
 			MainHelp()
 		}
@@ -252,4 +263,14 @@ func CommandDatasourceInfo(api *sling.Sling, args []string) {
 
 	b, _ := json.MarshalIndent(obj, "", "  ")
 	fmt.Println(string(b))
+}
+
+func CommandDatasourceList(api *sling.Sling) {
+	obj, _, err := informer5.DatasourceList(api)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for _, v := range obj.Embedded.InfDatasource {
+		fmt.Printf("%-4d %s\n", v.ID, v.Name)
+	}
 }
