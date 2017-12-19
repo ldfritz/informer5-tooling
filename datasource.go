@@ -323,18 +323,18 @@ func DatasourceCreate(api *sling.Sling, name, description string) (DatasourceCre
 	return obj, resp, nil
 }
 
-//func DatasourceDelete(api *sling.Sling, id string) (*http.Response, error) {
-//	req, err := api.New().Delete("datasources/" + id).Request()
-//	if err != nil {
-//		return &http.Response{}, err
-//	}
-//	client := InsecureClient()
-//	resp, err := client.Do(req)
-//	if err != nil {
-//		return resp, err
-//	}
-//	return resp, nil
-//}
+func DatasourceDelete(api *sling.Sling, id string) (*http.Response, error) {
+	req, err := api.New().Delete("datasources/" + id).Request()
+	if err != nil {
+		return &http.Response{}, err
+	}
+	client := InsecureClient()
+	resp, err := client.Do(req)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}
 
 //func DatasourceDownload(api *sling.Sling, id string) (DatasourceDownloadResponse, *http.Response, error) {
 //	s := api.New().Get("datasources/" + id + "/data")

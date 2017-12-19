@@ -28,8 +28,9 @@ dataset Commands:
   upload   ID FILENAME           Upload data from FILE to dataset.
 
 datasource Commands:
-  create   NAME [DESCRIPTION]    Create a new datasourc.
-  info     ID                    Display dataset information.`)
+  create   NAME [DESCRIPTION]    Create a new datasource.
+  delete   ID                    Delete a datasource.
+  info     ID                    Display datasource information.`)
 }
 
 type Token struct {
@@ -78,6 +79,8 @@ func main() {
 		switch action {
 		case "create":
 			CommandDatasourceCreate(api, os.Args)
+		case "delete":
+			CommandDatasourceDelete(api, os.Args)
 		case "info":
 			CommandDatasourceInfo(api, os.Args)
 		default:
@@ -219,6 +222,20 @@ func CommandDatasourceCreate(api *sling.Sling, args []string) {
 		log.Fatalln(err)
 	}
 	fmt.Println(obj.ID)
+}
+
+func CommandDatasourceDelete(api *sling.Sling, args []string) {
+	if len(args) < 4 {
+		fmt.Println("missing argument: ID\n")
+		MainHelp()
+		return
+	}
+	id := args[3]
+	_, err := informer5.DatasourceDelete(api, id)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(id)
 }
 
 func CommandDatasourceInfo(api *sling.Sling, args []string) {
