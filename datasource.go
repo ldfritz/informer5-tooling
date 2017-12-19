@@ -7,12 +7,128 @@ import (
 	"github.com/dghubble/sling"
 )
 
-//type DatasourceCreateBody struct {
-//	Name        string `url:"name,omitempty"`
-//	Description string `url:"description,omitempty"`
-//}
+type DatasourceCreateBody struct {
+	Name        string `url:"name,omitempty"`
+	Description string `url:"description,omitempty"`
+	Type        string `url:"type,omitempty"`
+}
 
-//type DatasourceCreateResponse interface{}
+type DatasourceCreateResponse struct {
+	Links struct {
+		Self struct {
+			Href string `json:"href"`
+		} `json:"self"`
+		Curies []struct {
+			Name      string `json:"name"`
+			Href      string `json:"href"`
+			Templated bool   `json:"templated"`
+		} `json:"curies"`
+		InfFeatures struct {
+			Href string `json:"href"`
+		} `json:"inf:features"`
+		InfComments struct {
+			Href string `json:"href"`
+		} `json:"inf:comments"`
+		InfLinks struct {
+			Href      string `json:"href"`
+			Templated bool   `json:"templated"`
+		} `json:"inf:links"`
+		InfLinkTypes struct {
+			Href string `json:"href"`
+		} `json:"inf:link-types"`
+		InfMappings struct {
+			Href      string `json:"href"`
+			Templated bool   `json:"templated"`
+		} `json:"inf:mappings"`
+		InfScan struct {
+			Href string `json:"href"`
+		} `json:"inf:scan"`
+		InfPing struct {
+			Href string `json:"href"`
+		} `json:"inf:ping"`
+		InfQuery struct {
+			Href      string `json:"href"`
+			Templated bool   `json:"templated"`
+		} `json:"inf:query"`
+		InfQueryString struct {
+			Href string `json:"href"`
+		} `json:"inf:query-string"`
+	} `json:"_links"`
+	DefaultLinkType string   `json:"defaultLinkType"`
+	Family          string   `json:"family"`
+	Languages       []string `json:"languages"`
+	NaturalID       string   `json:"naturalId"`
+	Image           string   `json:"image"`
+	Permissions     struct {
+		Edit           bool `json:"edit"`
+		Delete         bool `json:"delete"`
+		Share          bool `json:"share"`
+		Write          bool `json:"write"`
+		ChangeOwner    bool `json:"changeOwner"`
+		Ping           bool `json:"ping"`
+		Scan           bool `json:"scan"`
+		DownloadSchema bool `json:"downloadSchema"`
+		ImportData     bool `json:"importData"`
+		ImportSchema   bool `json:"importSchema"`
+		Rename         bool `json:"rename"`
+		EditConnection bool `json:"editConnection"`
+		CreateLink     bool `json:"createLink"`
+	} `json:"permissions"`
+	IsEmbedded      bool      `json:"embedded"`
+	SchemaUpdatedAt time.Time `json:"schemaUpdatedAt"`
+	RescanRequired  bool      `json:"rescanRequired"`
+	Shared          bool      `json:"shared"`
+	Settings        struct {
+		MultiSchema          bool `json:"multiSchema"`
+		UseFakeData          bool `json:"useFakeData"`
+		RemoteQueryBatchSize struct {
+			MultiKey  int `json:"multiKey"`
+			SingleKey int `json:"singleKey"`
+		} `json:"remoteQueryBatchSize"`
+	} `json:"settings"`
+	ID          int         `json:"id"`
+	Name        string      `json:"name"`
+	Type        string      `json:"type"`
+	Description string      `json:"description"`
+	UpdatedAt   time.Time   `json:"updatedAt"`
+	CreatedAt   time.Time   `json:"createdAt"`
+	OwnerID     string      `json:"ownerId"`
+	Slug        string      `json:"slug"`
+	Connection  interface{} `json:"connection"`
+	ScannedAt   interface{} `json:"scannedAt"`
+	Schemas     interface{} `json:"schemas"`
+	FileID      interface{} `json:"fileId"`
+	Source      interface{} `json:"source"`
+	SourceID    interface{} `json:"sourceId"`
+	Features    struct {
+	} `json:"features"`
+	Embedded struct {
+		InfDriver struct {
+			Links struct {
+				Self struct {
+					Href string `json:"href"`
+				} `json:"self"`
+				Image struct {
+					Href string `json:"href"`
+				} `json:"image"`
+				InfPing struct {
+					Href string `json:"href"`
+				} `json:"inf:ping"`
+			} `json:"_links"`
+			ID                 string   `json:"id"`
+			QueryDialect       string   `json:"queryDialect"`
+			Name               string   `json:"name"`
+			Group              string   `json:"group"`
+			Color              string   `json:"color"`
+			MaxQueryParameters int      `json:"maxQueryParameters"`
+			Languages          []string `json:"languages"`
+			Family             string   `json:"family"`
+			Image              string   `json:"image"`
+			DefaultLinkType    string   `json:"defaultLinkType"`
+			ColumnTypes        []string `json:"columnTypes"`
+		} `json:"inf:driver"`
+	} `json:"_embedded"`
+}
 
 //type DatasourceDownloadParams struct {
 //	Q      string      `url:"q,omitempty"`
@@ -197,15 +313,15 @@ type DatasourceInfoResponse struct {
 //	return resp, nil
 //}
 
-//func DatasourceCreate(api *sling.Sling, name, description string) (DatasourceCreateResponse, *http.Response, error) {
-//	var obj DatasourceCreateResponse
-//	body := DatasourceCreateBody{name, description}
-//	resp, err := api.New().Post("datasources").BodyForm(&body).ReceiveSuccess(&obj)
-//	if err != nil {
-//		return obj, resp, err
-//	}
-//	return obj, resp, nil
-//}
+func DatasourceCreate(api *sling.Sling, name, description string) (DatasourceCreateResponse, *http.Response, error) {
+	var obj DatasourceCreateResponse
+	body := DatasourceCreateBody{name, description, "workspace"}
+	resp, err := api.New().Post("datasources").BodyForm(&body).ReceiveSuccess(&obj)
+	if err != nil {
+		return obj, resp, err
+	}
+	return obj, resp, nil
+}
 
 //func DatasourceDelete(api *sling.Sling, id string) (*http.Response, error) {
 //	req, err := api.New().Delete("datasources/" + id).Request()

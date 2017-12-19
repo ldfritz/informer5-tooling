@@ -28,6 +28,7 @@ dataset Commands:
   upload   ID FILENAME           Upload data from FILE to dataset.
 
 datasource Commands:
+  create   NAME [DESCRIPTION]    Create a new datasourc.
   info     ID                    Display dataset information.`)
 }
 
@@ -75,6 +76,8 @@ func main() {
 		}
 	case "datasource":
 		switch action {
+		case "create":
+			CommandDatasourceCreate(api, os.Args)
 		case "info":
 			CommandDatasourceInfo(api, os.Args)
 		default:
@@ -198,6 +201,24 @@ func CommandDatasetUpload(api *sling.Sling, args []string) {
 		log.Fatalln(err)
 	}
 	fmt.Println(len(contents))
+}
+
+func CommandDatasourceCreate(api *sling.Sling, args []string) {
+	if len(args) < 4 {
+		fmt.Println("missing argument(s): NAME [DESCRIPTION]\n")
+		MainHelp()
+		return
+	}
+	name := args[3]
+	var description string
+	if len(args) == 5 {
+		description = args[4]
+	}
+	obj, _, err := informer5.DatasourceCreate(api, name, description)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(obj.ID)
 }
 
 func CommandDatasourceInfo(api *sling.Sling, args []string) {
