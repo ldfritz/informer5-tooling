@@ -10,7 +10,6 @@ We will slowly add more functionality to manage the data (and reports).
 ## Get it
 
 ```
-go get -u github.com/dghubble/sling
 go get -u github.com/ldfritz/informer5-tooling/cmd/i5
 ```
 
@@ -24,20 +23,4 @@ It is likely that this file will always need to be manually created.
 I don't see an obvious way to generate a token using the API without already having a token.
 
 The user interface is still very immature and likely to change.
-It currently implements a limited set of dataset manipulations.
-
-```
-Usage: i5 RESOURCE COMMAND [ARGUMENTS]
-
-Resources:
-  dataset
-
-dataset Commands:
-  append   ID FILENAME           Add data from FILE to dataset.
-  create   NAME [DESCRIPTION]    Create a new dataset.
-  delete   ID                    Delete a dataset.
-  download ID                    Download dataset.
-  info     ID                    Display dataset information.
-  list                           List datasets.
-  upload   ID FILENAME           Upload data from FILE to dataset.
-```
+It currently implements a limited set of dataset and datasource manipulations.
